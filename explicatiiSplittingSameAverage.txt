@@ -1,0 +1,26 @@
+Inainte de a incepe explicarea algoritmului am sa prezint partea matematica a problemei.
+Sublistele B si C reprezinta o partitie in care poate fi divizata lista mare.
+daca AVG(B) = AVG(C) => suma_elemente_sublista_B/|B| = suma_elemente_sublista_C/|C|(*)
+folosind proprietatea proportiilor a/b = c/d = (a+c)/(b+d)
+aplicand asta relatiei (*) => AVG(B) =AVG(C) = (suma_elemente_sublista_B + suma_elemente_sublista_C)/(|B| + |C|) = AVG(A)
+
+In rezolvarea problemei o sa folosesc 2 tehnici si anume pruning si programare dinamica.
+Folosesc pruning pentru a putea afirma din capul locului daca 2 liste pot fi impartite sau nu conform cerintei. 
+Daca in urma tehnicii pruning solutia ar putea fi valida, testam prin tehnica programarii dinamice daca este sau nu.
+
+
+--pruning--
+Pentru aceasta problema concreta putem elimina solutii din start daca nu exista niciun i = 1, n-1 astfel inca sum*i%n==0, unde n = |A|, sum = suma elementelor din A (**)
+Printr-un calcul simplu, putem exprima suma elementelor uneia dintre subliste astfel suma_elemente_sublista_C = k * (suma_elemente_A)/n, unde  k = |C|. Membrul stang stim ca este numar intreg 
+(reprezinta suma de numere intregi) => membrul drept trebuie sa fie numar intreg. Cum k = 1, n-1 => (**) este demonstrata; daca k = n => |B| = 0 (imposibil) - la fel si viceversa
+Metoda statica "checkIfPossibleToSplit" inglobeaza tehnica de pruning descrisa mai sus.
+
+
+--programare dinamica--
+Pentru eficientizarea algoritmului, folosim o structura de date eficienta si anume un List<Set<Integer>>. In aceasta lista vom retine toate sumele sublistelor posibile in 
+functie de cate elemente se insumeaza. Pe pozitia i a listei se va afla o multime care contine toate valorile sumelor care se pot obtine prin insumarea a i elemente din lista mare (A). 
+De ce Set ? Pentru ca proprietatea unei multimi este ca nu retine duplicate, ceea ce este eficient pentru un numar foarte mare de numere si implicit combinatii.
+In final parcurgem lista de multimi si verificam daca exista in multimea i o valoarea care este egala cu suma_elemente_A*i/|A|. Daca da, atunci stim ca o sublista are i elemente si cealalta va avea
+cele n-i elemente ramase din lista. (astfel returnam True - in caz contrat returnam False). 
+Metoda statica "checkIfSplittingFound" inglobeaza tehnica de programare dinamica si returneaza true daca impartirea se poate efectua in conditiile cerintei sau false in caz contrar.
+Metoda statica "findValueInSet" verifica daca o anumite valoare se afla intr-o submultime. (returneaza True daca apare si False in caz contrar).
